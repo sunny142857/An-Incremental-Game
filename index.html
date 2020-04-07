@@ -15,20 +15,14 @@
   <body>
     <h1>An Incremental Game</h1>
 
-    <p id="display1">Potatoes: <data id="potatoes"> 0</data></p>
-    <p id="display2">Carrots: <data id="carrots"> 0</data></p>
-    <p id="display3">Beetroots: <data id="beetroots"> 0</data></p>
+    <p id="display1">Fat Fat Coin: <data id="FFCoin"> 0</data></p>
     <p>1st Multiplier: <data id="multi1">1</data></p>
     <p>2nd Multiplier: <data id="multi2">1</data></p>
     <p>3rd Multiplier: <data id="multi3">1</data></p>
     <p>4th Multiplier: <data id="multi4">1</data></p>
     <p>5th Multiplier: <data id="multi5">1</data></p>
     <div style="width: 100%; background-color: white;">
-      <button onclick="farmPotatoes()">Grow Potatoes!</button>
-      <button onclick="infinity()">Infinity</button>
-      <button onclick="metainfinity()">Meta-Infinity</button><br />
-    </div>
-    <div style="width: 100%; background-color: white;">
+	  <button onclick="gainFFCoin()">Gain Fat Fat Coin!</button>
       <button onclick="multiplier2(1)">
         Buy 1st Multiplier <br />Cost: <data id="multi1cost"></data>
       </button>
@@ -47,7 +41,12 @@
     </div>
     <div style="width: 100%; background-color: white;">
 	  <!--<button onclick="toggleBulkBuying()">Bulk Buying: <data id="bulkBuyText">1x</data></button>-->
-	  <button onclick="toggleAutoBuying()">Auto Buying: <data id="autoBuyText">OFF</data></button>
+	  <button onclick="toggleAutoGainCoin()">Auto Gain Coin: <data id="autoGainText">OFF</data></button>
+	  <button onclick="toggleAutoBuyMulti(1)">Auto Buying 1st Multiplier: <data id="autoBuyMulti1">OFF</data></button>
+	  <button onclick="toggleAutoBuyMulti(2)">Auto Buying 2nd Multiplier: <data id="autoBuyMulti2">OFF</data></button>
+	  <button onclick="toggleAutoBuyMulti(3)">Auto Buying 3rd Multiplier: <data id="autoBuyMulti3">OFF</data></button>
+	  <button onclick="toggleAutoBuyMulti(4)">Auto Buying 4th Multiplier: <data id="autoBuyMulti4">OFF</data></button>
+	  <button onclick="toggleAutoBuyMulti(5)">Auto Buying 5th Multiplier: <data id="autoBuyMulti5">OFF</data></button>
     </div>
     <div style="width: 100%; background-color: white;">
       <button onclick="save()">

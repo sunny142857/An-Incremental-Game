@@ -1,9 +1,7 @@
 let game;
 function reset() {
   game = {
-    potatoes: ExpantaNum(0),
-    carrots: ExpantaNum(0),
-    beetroots: ExpantaNum(0),
+    FFCoin: ExpantaNum(0),
     multi: [
       ExpantaNum(1),
       ExpantaNum(1),
@@ -13,18 +11,24 @@ function reset() {
       ExpantaNum(1)
     ],
 	auto: 0,
+	autoMultiplier: [
+	  0,
+	  0,
+	  0,
+	  0,
+	  0
+	],
 	bulk: 0
   };
   
-  showpotatoes();
-  showcarrots();
-  showbeetroots();
+  showFFCoin();
   showMultipier();
+  showAutoBuyMulti();
 }
 let multiplierReq = [
   ExpantaNum(10),
-  ExpantaNum("1e8"),
-  ExpantaNum("1e1000"),
+  ExpantaNum("1e6"),
+  ExpantaNum("1e11"),
   ExpantaNum("ee10"),
   ExpantaNum("ee1000"),
   ExpantaNum("eee10000")
@@ -47,19 +51,19 @@ reset();
 var savePath = "AIGSave.txt"
 function save() {
   let gameTemp = new Object();
-  gameTemp['potatoes'] = game['potatoes'].toString();
-  gameTemp['carrots'] = game['carrots'].toString();
-  gameTemp['beetroots'] = game['beetroots'].toString();
+  gameTemp['FFCoin'] = game['FFCoin'].toString();
   gameTemp['multi'] = game['multi'].toString();
   gameTemp['auto'] = game['auto'].toString();
+  gameTemp['autoMultiplier'] = game['autoMultiplier'].toString();
+  gameTemp['bulk'] = game['bulk'].toString();
   localStorage.setItem(savePath, JSON.stringify(gameTemp));
 }
 function loadgame(loadgameTemp) {
-  game['potatoes'] = ExpantaNum(loadgameTemp['potatoes']);
-  game['carrots'] = ExpantaNum(loadgameTemp['carrots']);
-  game['beetroots'] = ExpantaNum(loadgameTemp['beetroots']);
+  game['FFCoin'] = ExpantaNum(loadgameTemp['FFCoin']);
   game['multi'] = (loadgameTemp['multi'].split(',')).map(ExpantaNum);
   game['auto'] = Number(loadgameTemp['auto']);
+  game['autoMultiplier'] = (loadgameTemp['autoMultiplier'].split(',')).map(Number);;
+  game['bulk'] = Number(loadgameTemp['bulk']);
 }
 function load() {
   var loadgameTemp = JSON.parse(localStorage.getItem(savePath));
@@ -67,10 +71,9 @@ function load() {
   if (loadgameTemp != null) {
     reset();
     loadgame(loadgameTemp);
-    showpotatoes();
-    showcarrots();
-    showbeetroots();
+    showFFCoin();
     showMultipier();
+    showAutoBuyMulti();
   }
 }
 function squareRootSum(n) {
@@ -79,57 +82,57 @@ function squareRootSum(n) {
 }
 
 
-function farmPotatoes() {
-  game.potatoes = game.potatoes.add(game.multi[0]);
-  showpotatoes();
+function gainFFCoin() {
+  game.FFCoin = game.FFCoin.add(game.multi[0]);
+  showFFCoin();
 }
 function bulkBuyMultiplier(n) {
   var price = (game.multi[n - 1].pow(0.5).times(multiplierReq[n - 1])).round();
-  if (game.potatoes.gte(price)) {
+  if (game.FFCoin.gte(price)) {
 	game.multi[n - 1] = game.multi[n - 1].add(1)
-	game.potatoes = game.potatoes.sub(price);
-    showpotatoes();
+	game.FFCoin = game.FFCoin.sub(price);
+    showFFCoin();
     showMultipier();
   }
 }
 function multiplier2(n) {
-  var price = (game.multi[n - 1].pow(0.5).times(multiplierReq[n - 1])).round();
-  if (game.potatoes.gte(price)) {
-	game.multi[n - 1] = game.multi[n - 1].add(1)
-	game.potatoes = game.potatoes.sub(price);
-    showpotatoes();
+  let price = (game.multi[n - 1].pow(0.5).times(multiplierReq[n - 1])).round();
+  if (game.FFCoin.gte(price)) {
+	game.multi[n - 1] = game.multi[n - 1].add(game.multi[n]);
+	game.FFCoin = game.FFCoin.sub(price);
+    showFFCoin();
     showMultipier();
   }
 }
 
 function multiplier(n) {
-  if (game.potatoes.gte(multiplierReq[n - 1])) {
+  if (game.FFCoin.gte(multiplierReq[n - 1])) {
 	  
     //if (true){
-      let bulk = ExpantaNum.floor(game.potatoes.div(multiplierReq[n - 1]));
-      game.potatoes = game.potatoes.sub(multiplierReq[n - 1].mul(bulk));
+      let bulk = ExpantaNum.floor(game.FFCoin.div(multiplierReq[n - 1]));
+      game.FFCoin = game.FFCoin.sub(multiplierReq[n - 1].mul(bulk));
       game.multi[n - 1] = game.multi[n - 1].add(game.multi[n].times(bulk));
-	  if (game.potatoes.lt(ExpantaNum(0))) {
-		game.potatoes = ExpantaNum(0);
+	  if (game.FFCoin.lt(ExpantaNum(0))) {
+		game.FFCoin = ExpantaNum(0);
 	  }
     //}else{
-    //  game.multi[n-1] = game.multi[n-1].add(game.potatoes.times(game.multi[n]).div(multiplierReq[n-1]).round())
-    //  game.potatoes = ExpantaNum(0);
+    //  game.multi[n-1] = game.multi[n-1].add(game.FFCoin.times(game.multi[n]).div(multiplierReq[n-1]).round())
+    //  game.FFCoin = ExpantaNum(0);
     //}
     //document.getElementById("newline").innerHTML += bulk + "<br>";
-    showpotatoes();
+    showFFCoin();
     showMultipier();
     //not sure if >= is in expantanum
     // or do we have >= ?
-    // currently you need at least 11 potatoes to buy this even though it costs 10s
+    // currently you need at least 11 FFCoin to buy this even though it costs 10s
     //dang
   }
 }
-
+/*
 function infinity() {
-  if (game.potatoes.gt(ExpantaNum("1e308"))) {
-    game.carrots = game.carrots.add(game.potatoes.log10()).round();
-    game.potatoes = ExpantaNum(0);
+  if (game.FFCoin.gt(ExpantaNum("1e308"))) {
+    game.carrots = game.carrots.add(game.FFCoin.log10()).round();
+    game.FFCoin = ExpantaNum(0);
     showpotatoes();
     showcarrots();
   }
@@ -152,7 +155,7 @@ function metainfinity() {
     showbeetroots();
   }
 }
-
+*/
 //I'm going to set up for meta2infinity --moooosey
 /*function meta2infinity() {
   if (game.beetroots.gt(ExpantaNum("(10^)^50 1"))) {
@@ -174,22 +177,28 @@ function showMultipier(){
       (game.multi[i - 1].pow(0.5).times(multiplierReq[i - 1])).round();
   }  
 }
-function showpotatoes() {
-  document.getElementById("potatoes").innerHTML = game.potatoes;
+function showFFCoin() {
+  document.getElementById("FFCoin").innerHTML = game.FFCoin;
 }
-function showcarrots() {
-  document.getElementById("carrots").innerHTML = game.carrots;
-}
-
-function showbeetroots() {
-  document.getElementById("beetroots").innerHTML = game.beetroots;
-}
-function toggleAutoBuying() {
+function toggleAutoGainCoin() {
   game.auto = 1 - game.auto;
   if (game.auto == 1) {
-	document.getElementById("autoBuyText").innerHTML = "ON";
+	document.getElementById("autoGainText").innerHTML = "ON";
   }else{
-	document.getElementById("autoBuyText").innerHTML = "OFF";
+	document.getElementById("autoGainText").innerHTML = "OFF";
+  }
+}
+function toggleAutoBuyMulti(n) {
+  game.autoMultiplier[n-1] = 1 - game.autoMultiplier[n-1];
+  showAutoBuyMulti();
+}
+function showAutoBuyMulti() {
+  for (var n = 1; n < 6; n++){
+    if (game.autoMultiplier[n-1] == 1) {
+	  document.getElementById("autoBuyMulti"+n).innerHTML = "ON";
+    }else{
+	  document.getElementById("autoBuyMulti"+n).innerHTML = "OFF";
+    }
   }
 }
 function toggleBulkBuying() {
@@ -214,16 +223,10 @@ function toggleBulkBuying() {
 }
 let x = 0;
 window.setInterval(function() {
-  if (game.auto == 1) {
-    x++;
-    if (x >= 7) x = 0;
-    if (x == 0) multiplier2(1);
-    if (x == 1) multiplier2(2);
-    if (x == 2) multiplier2(3);
-    if (x == 3) multiplier2(4);
-    if (x == 4) multiplier2(5);
-    if (x == 5) infinity();
-    if (x == 6) metainfinity();
-    farmPotatoes();
-  }
+  if (game.auto == 1) gainFFCoin();
+  if (game.autoMultiplier[0] == 1) multiplier2(1);
+  if (game.autoMultiplier[1] == 1) multiplier2(2);
+  if (game.autoMultiplier[2] == 1) multiplier2(3);
+  if (game.autoMultiplier[3] == 1) multiplier2(4);
+  if (game.autoMultiplier[4] == 1) multiplier2(5);
 }, 50);
