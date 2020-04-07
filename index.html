@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>AIG</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+    <script type="text/javascript" src="ExpantaNum.js"></script>
+    <!-- import the webpage's javascript file -->
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <h1>An Incremental Game</h1>
+
+    <p id="display1">Potatoes: <data id="potatoes"> 0</data></p>
+    <p id="display2">Carrots: <data id="carrots"> 0</data></p>
+    <p id="display3">Beetroots: <data id="beetroots"> 0</data></p>
+    <p>1st Multiplier: <data id="multi1">1</data></p>
+    <p>2nd Multiplier: <data id="multi2">1</data></p>
+    <p>3rd Multiplier: <data id="multi3">1</data></p>
+    <p>4th Multiplier: <data id="multi4">1</data></p>
+    <p>5th Multiplier: <data id="multi5">1</data></p>
+    <div style="width: 100%; background-color: white;">
+      <button onclick="farmPotatoes()">Grow Potatoes!</button>
+      <button onclick="infinity()">Infinity</button>
+      <button onclick="metainfinity()">Meta-Infinity</button><br />
+    </div>
+    <div style="width: 100%; background-color: white;">
+      <button onclick="multiplier2(1)">
+        Buy 1st Multiplier <br />Cost: <data id="multi1cost"></data>
+      </button>
+      <button onclick="multiplier2(2)">
+        Buy 2nd Multiplier <br />Cost: <data id="multi2cost"></data>
+      </button>
+      <button onclick="multiplier2(3)">
+        Buy 3rd Multiplier <br />Cost: <data id="multi3cost"></data>
+      </button>
+      <button onclick="multiplier2(4)">
+        Buy 4th Multiplier <br />Cost: <data id="multi4cost"></data>
+      </button>
+      <button onclick="multiplier2(5)">
+        Buy 5th Multiplier <br />Cost: <data id="multi5cost"></data>
+      </button>
+    </div>
+    <div style="width: 100%; background-color: white;">
+	  <!--<button onclick="toggleBulkBuying()">Bulk Buying: <data id="bulkBuyText">1x</data></button>-->
+	  <button onclick="toggleAutoBuying()">Auto Buying: <data id="autoBuyText">OFF</data></button>
+    </div>
+    <div style="width: 100%; background-color: white;">
+      <button onclick="save()">
+        Save
+      </button>
+      <button onclick="load()">
+        Load
+      </button>
+      <button onclick="reset()">
+        Reset
+      </button>
+    </div>
+    <p id="newline"></p>
+  </body>
+</html>
