@@ -49,43 +49,50 @@
 			Gain Fat Fat Coin!
 		</button>
 		<button id="toggleAutoGainCoinButton" class="offButton" onclick="toggleAutoGainCoin()">
-			Auto Gain Coin: <text id="autoGainText">OFF</data>
+			<div> Auto Gain Coin: </div>
+			<text id="autoGainText">OFF</data>
 		</button>
 		<button class="defaultButton" onclick="multiplier2(1)">
-			Buy 1st Multiplier <br />Cost: <data id="multi1cost"></data>
+			Employ 1 Fat Fat Worker <br />Cost: <data id="multi1cost"></data> FFC
 		</button>
 		<button id="toggleAutoBuyMultiButton1" class="offButton" onclick="toggleAutoBuyMulti(1)">
-			Auto Buying 1st Multiplier: <text id="autoBuyMulti1">OFF</data>
+			<div> Auto Employing Fat Fat Worker: </div>
+			<text id="autoBuyMulti1">OFF</text>
 		</button>
 		<button class="defaultButton" onclick="multiplier2(2)">
-			Buy 2nd Multiplier <br />Cost: <data id="multi2cost"></data>
+			Employ 1 Fat Fat Supervisor <br />Cost: <data id="multi2cost"></data> FFC
 		</button>
 		<button id="toggleAutoBuyMultiButton2" class="offButton" onclick="toggleAutoBuyMulti(2)">
-			Auto Buying 2nd Multiplier: <text id="autoBuyMulti2">OFF</data>
+			<div> Auto Employing Fat Fat Supervisor: </div>
+			<text id="autoBuyMulti2">OFF</text>
 		</button>
 		<button class="defaultButton" onclick="multiplier2(3)">
-			Buy 3rd Multiplier <br />Cost: <data id="multi3cost"></data>
+			Employ 1 Fat Fat Manager <br />Cost: <data id="multi3cost"></data> FFC
 		</button>
 		<button id="toggleAutoBuyMultiButton3" class="offButton" onclick="toggleAutoBuyMulti(3)">
-			Auto Buying 3rd Multiplier: <text id="autoBuyMulti3">OFF</data>
+			<div> Auto Employing Fat Fat Manager: </div>
+			<text id="autoBuyMulti3">OFF</text>
 		</button>
 		<button class="defaultButton" onclick="multiplier2(4)">
-			Buy 4th Multiplier <br />Cost: <data id="multi4cost"></data>
+			Employ 1 Fat Fat Director <br />Cost: <data id="multi4cost"></data> FFC
 		</button>
 		<button id="toggleAutoBuyMultiButton4" class="offButton" onclick="toggleAutoBuyMulti(4)">
-			Auto Buying 4th Multiplier: <text id="autoBuyMulti4">OFF</data>
+			<div> Auto Employing Fat Fat Director:</div>
+			<text id="autoBuyMulti4">OFF</text>
 		</button>
 		<button class="defaultButton" onclick="multiplier2(5)">
-			Buy 5th Multiplier <br />Cost: <data id="multi5cost"></data>
+			Employ 1 Fat Fat Overseer <br />Cost: <data id="multi5cost"></data> FFC
 		</button>
 		<button id="toggleAutoBuyMultiButton5" class="offButton" onclick="toggleAutoBuyMulti(5)">
-			Auto Buying 5th Multiplier: <text id="autoBuyMulti5">OFF</data>
+			<div> Auto Employing Fat Fat Overseer: </div>
+			<text id="autoBuyMulti5">OFF</text>
 		</button>
     </div>
     <div style="width: 100%; background-color: white;">
 	  <button class="defaultButton" onclick="buyRabbot()">
-	    Buy Rabbot! <br />Cost: <data id="rabbotcost">1e21</data>
+	    Buy Rabbot! <br />Cost: <data id="rabbotCost">1e21</data> FFC
       </button>
+	  <!--
       <button class="defaultButton" onclick="rabmultiplier(1)">
         Buy 1st Rabbot Multiplier <br />Cost: <data id="rabmulti1cost"></data>
       </button>
@@ -101,13 +108,20 @@
       <button class="defaultButton" onclick="rabmultiplier(5)">
         Buy 5th Rabbot Multiplier <br />Cost: <data id="rabmulti5cost"></data>
       </button>
+	  -->
     </div>
     <div style="width: 100%; background-color: white;">
-      <button class="defaultButton" onclick="save()">
+      <button class="defaultButton" onclick="saveGame()">
         Save
       </button>
-      <button class="defaultButton" onclick="load()">
+      <button class="defaultButton" onclick="loadGame()">
         Load
+      </button>
+      <button class="defaultButton" onclick="exportGame()">
+        Export Save
+      </button>
+      <button class="defaultButton" onclick="importGame()">
+        Import Save
       </button>
       <button class="defaultButton" onclick="reset()">
         Reset

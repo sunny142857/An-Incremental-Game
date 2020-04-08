@@ -73,7 +73,18 @@ var savePath = "AIGSave.txt"
 function save() {
   localStorage.setItem(savePath, JSON.stringify(game));
 }
-function loadgame(loadgameTemp) {
+function exportGame() {
+  copyStringToClipboard(btoa(JSON.stringify(game)))
+}
+function importGame() {
+  let loadgameTemp=""
+  loadgameTemp = JSON.parse(atob(prompt("Paste in your save WARNING: WILL OVERWRITE YOUR CURRENT SAVE")))
+  if (loadgameTemp!="") {
+    loadingGame(loadgameTemp)
+  }
+  showAll();
+}
+function loadingGame(loadgameTemp) {
   game['FFCoin'] = ENify(loadgameTemp['FFCoin']);
   game['Rabbot'] = ENify(loadgameTemp['Rabbot']);
   game['multi'] = (loadgameTemp['multi']).map(ENify);
@@ -81,12 +92,12 @@ function loadgame(loadgameTemp) {
   game['autoMultiplier'] = (loadgameTemp['autoMultiplier']).map(Number);;
   game['bulk'] = Number(loadgameTemp['bulk']);
 }
-function load() {
+function loadGame() {
   var loadgameTemp = JSON.parse(localStorage.getItem(savePath));
   //document.getElementById('newline').innerHTML = localStorage.getItem(savePath);
   if (loadgameTemp != null) {
     reset();
-    loadgame(loadgameTemp);
+    loadingGame(loadgameTemp);
 	showAll();
   }
 }
@@ -179,7 +190,6 @@ function toggleBulkBuying() {
   }
   showMultipier();
 }
-let x = 0;
 window.setInterval(function() {
   if (game.auto == 1) gainFFCoin();
   if (game.autoMultiplier[0] == 1) multiplier2(1);
@@ -188,3 +198,39 @@ window.setInterval(function() {
   if (game.autoMultiplier[3] == 1) multiplier2(4);
   if (game.autoMultiplier[4] == 1) multiplier2(5);
 }, 50);
+
+function copyStringToClipboard(str) {
+  var el = document.createElement("textarea");
+  el.value = str;
+  el.setAttribute("readonly", "");
+  el.style = {
+    position: "absolute",
+    left: "-9999px"
+  };
+  document.body.appendChild(el);
+  copyToClipboard(el)
+  document.body.removeChild(el);
+  alert("Copied to clipboard")
+}
+
+function copyToClipboard(el) {
+    el = (typeof el === "string") ? document.querySelector(el) : el;
+    if (navigator.userAgent.match(/ipad|ipod|iphone/i)) {
+        var editable = el.contentEditable;
+        var readOnly = el.readOnly;
+        el.contentEditable = true;
+        el.readOnly = true;
+        var range = document.createRange();
+        range.selectNodeContents(el);
+        var selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        el.setSelectionRange(0, 999999);
+        el.contentEditable = editable;
+        el.readOnly = readOnly;
+    }
+    else {
+        el.select();
+    }
+    document.execCommand("copy");
+}

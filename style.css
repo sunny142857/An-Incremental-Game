@@ -3,11 +3,13 @@
 body {
   font-family: sans-serif;
   margin: 2em;
+  background-color: #000000;
+  color: #FFFFFF;
 }
 
 h1 {
   font-style: italic;
-  color: #000000;
+  color: #FFFFFF;
 }
 div {
   display:flex;
@@ -23,9 +25,9 @@ div {
 }
 .defaultButton {  
 	height: 48px;
-	background-color: #e7e7e7; /* Gray */
+	background-color: #999999; /* Dark Gray */
 	border: 1px solid black;
-	color: black;
+	color: #FFFFFF;
 	width: 100%;
 	text-align: center;
 	text-decoration: none;
@@ -33,6 +35,9 @@ div {
 	font-size: 16px;
 }
 .onButton {  
+	display: grid; 
+	grid-template-columns: 80% 20%; 
+	align-content: center;
 	height: 48px;
 	background-color: #4CAF50; /* Green */
 	border: 1px solid green;
@@ -40,10 +45,12 @@ div {
 	width: 100%;
 	text-align: center;
 	text-decoration: none;
-	display: inline-block;
 	font-size: 16px;
 }
 .offButton {  
+	display: grid; 
+	grid-template-columns: 80% 20%; 
+	align-content: center;
 	height: 48px;
 	background-color: #f44336; /* Red */
 	border: 1px solid red;
@@ -51,7 +58,6 @@ div {
 	width: 100%;
 	text-align: center;
 	text-decoration: none;
-	display: inline-block;
 	font-size: 16px;
 }
 .lockedButton {  
