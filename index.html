@@ -14,48 +14,93 @@
   </head>
   <body>
     <h1>An Incremental Game</h1>
-
-    <p id="display1">Fat Fat Coin: <data id="FFCoin"> 0</data></p>
-    <p>1st Multiplier: <data id="multi1">1</data></p>
-    <p>2nd Multiplier: <data id="multi2">1</data></p>
-    <p>3rd Multiplier: <data id="multi3">1</data></p>
-    <p>4th Multiplier: <data id="multi4">1</data></p>
-    <p>5th Multiplier: <data id="multi5">1</data></p>
+	<div class="rTable">
+	  <div class="rTableRow">
+        <div class="lTableCell">Fat Fat Coin: </div>
+		<div class="rTableCell"><data id="FFCoin"> 0</data></div>
+	  </div>
+	  <div class="rTableRow">
+        <div class="lTableCell">1st Multiplier: </div>
+		<div class="rTableCell"><data id="multi1">1</data></div>
+	  </div>
+	  <div class="rTableRow">
+        <div class="lTableCell">2nd Multiplier: </div>
+		<div class="rTableCell"><data id="multi2">1</data></div>
+	  </div>
+	  <div class="rTableRow">
+        <div class="lTableCell">3rd Multiplier: </div>
+		<div class="rTableCell"><data id="multi3">1</data></div>
+	  </div>
+	  <div class="rTableRow">
+        <div class="lTableCell">4th Multiplier: </div>
+		<div class="rTableCell"><data id="multi4">1</data></div>
+	  </div>
+	  <div class="rTableRow">
+        <div class="lTableCell">5th Multiplier: </div>
+		<div class="rTableCell"><data id="multi5">1</data></div>
+	  </div>
+	  <div class="rTableRow">
+        <div class="lTableCell">Rabbot: </div>
+		<div class="rTableCell"><data id="Rabbot">0</data></div>
+	  </div>
+	</div>
     <div style="width: 100%; background-color: white;">
-	  <button onclick="gainFFCoin()">Gain Fat Fat Coin!</button>
-      <button onclick="multiplier2(1)">
+	  <button class="defaultButton" onclick="gainFFCoin()">
+	    Gain Fat Fat Coin!
+	  </button>
+      <button class="defaultButton" onclick="multiplier2(1)">
         Buy 1st Multiplier <br />Cost: <data id="multi1cost"></data>
       </button>
-      <button onclick="multiplier2(2)">
+      <button class="defaultButton" onclick="multiplier2(2)">
         Buy 2nd Multiplier <br />Cost: <data id="multi2cost"></data>
       </button>
-      <button onclick="multiplier2(3)">
+      <button class="defaultButton" onclick="multiplier2(3)">
         Buy 3rd Multiplier <br />Cost: <data id="multi3cost"></data>
       </button>
-      <button onclick="multiplier2(4)">
+      <button class="defaultButton" onclick="multiplier2(4)">
         Buy 4th Multiplier <br />Cost: <data id="multi4cost"></data>
       </button>
-      <button onclick="multiplier2(5)">
+      <button class="defaultButton" onclick="multiplier2(5)">
         Buy 5th Multiplier <br />Cost: <data id="multi5cost"></data>
       </button>
     </div>
     <div style="width: 100%; background-color: white;">
 	  <!--<button onclick="toggleBulkBuying()">Bulk Buying: <data id="bulkBuyText">1x</data></button>-->
-	  <button onclick="toggleAutoGainCoin()">Auto Gain Coin: <data id="autoGainText">OFF</data></button>
-	  <button onclick="toggleAutoBuyMulti(1)">Auto Buying 1st Multiplier: <data id="autoBuyMulti1">OFF</data></button>
-	  <button onclick="toggleAutoBuyMulti(2)">Auto Buying 2nd Multiplier: <data id="autoBuyMulti2">OFF</data></button>
-	  <button onclick="toggleAutoBuyMulti(3)">Auto Buying 3rd Multiplier: <data id="autoBuyMulti3">OFF</data></button>
-	  <button onclick="toggleAutoBuyMulti(4)">Auto Buying 4th Multiplier: <data id="autoBuyMulti4">OFF</data></button>
-	  <button onclick="toggleAutoBuyMulti(5)">Auto Buying 5th Multiplier: <data id="autoBuyMulti5">OFF</data></button>
+	  <button id="toggleAutoGainCoinButton" class="offButton" onclick="toggleAutoGainCoin()">Auto Gain Coin: <text id="autoGainText">OFF</data></button>
+	  <button id="toggleAutoBuyMultiButton1" class="offButton" onclick="toggleAutoBuyMulti(1)">Auto Buying 1st Multiplier: <text id="autoBuyMulti1">OFF</data></button>
+	  <button id="toggleAutoBuyMultiButton2" class="offButton" onclick="toggleAutoBuyMulti(2)">Auto Buying 2nd Multiplier: <text id="autoBuyMulti2">OFF</data></button>
+	  <button id="toggleAutoBuyMultiButton3" class="offButton" onclick="toggleAutoBuyMulti(3)">Auto Buying 3rd Multiplier: <text id="autoBuyMulti3">OFF</data></button>
+	  <button id="toggleAutoBuyMultiButton4" class="offButton" onclick="toggleAutoBuyMulti(4)">Auto Buying 4th Multiplier: <text id="autoBuyMulti4">OFF</data></button>
+	  <button id="toggleAutoBuyMultiButton5" class="offButton" onclick="toggleAutoBuyMulti(5)">Auto Buying 5th Multiplier: <text id="autoBuyMulti5">OFF</data></button>
     </div>
     <div style="width: 100%; background-color: white;">
-      <button onclick="save()">
+	  <button class="defaultButton" onclick="buyRabbot()">
+	    Buy Rabbot! <br />Cost: <data id="rabbotcost">1e21</data>
+      </button>
+      <button class="defaultButton" onclick="rabmultiplier(1)">
+        Buy 1st Rabbot Multiplier <br />Cost: <data id="rabmulti1cost"></data>
+      </button>
+      <button class="defaultButton" onclick="rabmultiplier(2)">
+        Buy 2nd Rabbot Multiplier <br />Cost: <data id="rabmulti2cost"></data>
+      </button>
+      <button class="defaultButton" onclick="rabmultiplier(3)">
+        Buy 3rd Rabbot Multiplier <br />Cost: <data id="rabmulti3cost"></data>
+      </button>
+      <button class="defaultButton" onclick="rabmultiplier(4)">
+        Buy 4th Rabbot Multiplier <br />Cost: <data id="rabmulti4cost"></data>
+      </button>
+      <button class="defaultButton" onclick="rabmultiplier(5)">
+        Buy 5th Rabbot Multiplier <br />Cost: <data id="rabmulti5cost"></data>
+      </button>
+    </div>
+    <div style="width: 100%; background-color: white;">
+      <button class="defaultButton" onclick="save()">
         Save
       </button>
-      <button onclick="load()">
+      <button class="defaultButton" onclick="load()">
         Load
       </button>
-      <button onclick="reset()">
+      <button class="defaultButton" onclick="reset()">
         Reset
       </button>
     </div>

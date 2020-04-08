@@ -1,7 +1,7 @@
 /* CSS files add styling rules to your content */
 
 body {
-  font-family: Comic Sans MS, arial, sans-serif;
+  font-family: sans-serif;
   margin: 2em;
 }
 
@@ -13,7 +13,77 @@ div {
   display:flex;
   justify-content:space-around;
 }
-button {
+.defaultButton {  
+  background-color: #e7e7e7; /* Gray */
+  border: 1px solid black;
+  color: black;
   width: 100%;
-  margin: 0px; /* or whatever you like */
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+.onButton {  
+  background-color: #4CAF50; /* Green */
+  border: 1px solid green;
+  color: white;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+.offButton {  
+  background-color: #f44336; /* Red */
+  border: 1px solid red;
+  color: white;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+.lockedButton {  
+  background-color: #555555; /* Black */
+  border: 1px solid red;
+  color: white;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+data {
+  font-family: courier
+}
+.rTable { 
+  display: table; 
+  table-layout: fixed;
+  width: 100%
+}
+.rTableRow { display: table-row; }
+.rTableHeading { display: table-header-group; }
+.rTableBody { 
+  display: table-row-group; 
+}
+.rTableFoot { 
+  display: table-footer-group; 
+}
+.rTableCell, .rTableHead { 
+  font-family: sans-serif;
+  display: table-cell; 
+  text-align: right;
+  width: 50%
+}
+.cTableCell, .cTableHead { 
+  font-family: sans-serif;
+  display: table-cell; 
+  text-align: center;
+  width: 28%
+}
+.lTableCell, .lTableHead { 
+  font-family: sans-serif;
+  display: table-cell; 
+  text-align: left;
+  width: 50%
 }
