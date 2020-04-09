@@ -1,36 +1,7 @@
+//Constants
 let EN = ExpantaNum;
 let game;
-function reset() {
-  game = {
-    FFCoin: EN(0),
-	Rabbot: EN(0),
-    multi: [
-      EN(1),
-      EN(1),
-      EN(1),
-      EN(1),
-      EN(1),
-      EN(1)
-    ],
-	auto: 0,
-	autoMultiplier: [
-	  0,
-	  0,
-	  0,
-	  0,
-	  0
-	],
-	bulk: 0
-  };
-  
-  showAll();
-}
-function showAll() {
-  showFFCoin();
-  showMultipier();
-  showAutoBuy();
-  showRabbot();
-}
+const savePath = "AIGSave.txt"
 const multiplierReq = [
   EN(10),
   EN("1e5"),
@@ -39,24 +10,71 @@ const multiplierReq = [
   EN("1e17"),
   EN("eee10000")
 ];
-const multiplierRatio = [
-  EN(1.01),
-  EN(1.0001),
-  EN(1.000001),
-  EN(1.00000001),
-  EN(1.0000000001),
-  EN("eee10000")
+const autoReq = EN(50);
+const autoMultiReq = [
+	EN("5e2"),
+	EN("5e6"),
+	EN("5e10"),
+	EN("5e14"),
+	EN("5e18"),
 ];
-let bulkBuying = [
+const rabbotBasePrice = EN("1e21")
+const bulkBuying = [
   EN(1),
   EN(10),
   EN(100),
   EN(Infinity),
 ];
-reset();
+const gameStrings = {
+	FFC: "Fat Fat Coin",
+	FF1: "Fat Fat Worker",
+	FF2: "Fat Fat Supervisor",
+	FF3: "Fat Fat Manager",
+	FF4: "Fat Fat Director",
+	FF5: "Fat Fat Overseer",
+	Rabbot: "Rabbot",
+	On: "On",
+	Off: "Off"
+};
+
+//Utility functions
 function squareRootSum(n) {
 	let m = EN.floor(n.pow(0.5));
 	return m.times(n.sub((m.pow(2).times(2).add(m.times(3).sub(5))).div(6))).round();
+}
+function beautifyNumber(number,f=0) {
+  if (typeof number == "number") {
+  if (number==Infinity) {
+    return "Infinity"
+  } else if (10**265 > number) {
+  if (10**257>number) {
+	let exponent = Math.floor(Math.log10(number+0.1))
+	let mantissa = number / Math.pow(10, exponent)
+	if (exponent < 6) return Math.round(number)
+  if (mantissa.toFixed(3)=="10.000") return "9.999e" + exponent
+	return mantissa.toFixed(3) + "e" + exponent
+  } else {
+    return "1.000e300"
+  }
+  } else {
+    return "g<sub>" + displayOrd(number-10**270,3) + "</sub> (10)"
+  }} else {
+    return beautifyEN(number,f)
+  }
+}
+function beautifyEN(n,f=0) {
+ let x = EN(n)
+  if (x.lte(1e5)) {
+    return (f==0?x.floor().toString():x.toNumber().toFixed(f))
+  } else if (x.lte("ee5")) {
+    let exponent = x.log10().floor()
+    let mantissa = x.divide(EN(10).pow(exponent)).toNumber().toFixed(2)
+    if (mantissa=="10.00") exponent = exponent.add(1)
+    if (mantissa=="10.00") mantissa = "1.00"
+    return mantissa + "e" + beautifyNumber(exponent)
+  } else {
+    return x.floor().toString()
+  }
 }
 function ENify(x) {
   if (typeof x == "number") {
@@ -69,8 +87,34 @@ function ENify(x) {
     return newEN
   }
 }
-var savePath = "AIGSave.txt"
-function save() {
+
+//Game Functions
+function reset() {
+  game = {
+    FFCoin: EN(0),
+	Rabbot: EN(0),
+    multi: [
+      EN(0),
+      EN(0),
+      EN(0),
+      EN(0),
+      EN(0),
+      EN(0)
+    ],
+	auto: -1,
+	autoMultiplier: [-1, -1, -1, -1, -1],
+	efficiency: 0
+  };
+  
+  showAll();
+}
+function showAll() {
+  showFFCoin();
+  showMultipier();
+  showAutoBuy();
+  showRabbot();
+}
+function saveGame() {
   localStorage.setItem(savePath, JSON.stringify(game));
 }
 function exportGame() {
@@ -85,16 +129,16 @@ function importGame() {
   showAll();
 }
 function loadingGame(loadgameTemp) {
-  game['FFCoin'] = ENify(loadgameTemp['FFCoin']);
-  game['Rabbot'] = ENify(loadgameTemp['Rabbot']);
-  game['multi'] = (loadgameTemp['multi']).map(ENify);
-  game['auto'] = Number(loadgameTemp['auto']);
-  game['autoMultiplier'] = (loadgameTemp['autoMultiplier']).map(Number);;
-  game['bulk'] = Number(loadgameTemp['bulk']);
+  game["FFCoin"] = ENify(loadgameTemp["FFCoin"]);
+  game["Rabbot"] = ENify(loadgameTemp["Rabbot"]);
+  game["multi"] = (loadgameTemp["multi"]).map(ENify);
+  game["auto"] = Number(loadgameTemp["auto"]);
+  game["autoMultiplier"] = (loadgameTemp["autoMultiplier"]).map(Number);;
+  game["efficiency"] = Number(loadgameTemp["efficiency"]);
 }
 function loadGame() {
   var loadgameTemp = JSON.parse(localStorage.getItem(savePath));
-  //document.getElementById('newline').innerHTML = localStorage.getItem(savePath);
+  //document.getElementById("newline").innerHTML = localStorage.getItem(savePath);
   if (loadgameTemp != null) {
     reset();
     loadingGame(loadgameTemp);
@@ -104,11 +148,14 @@ function loadGame() {
 
 
 function gainFFCoin() {
-  game.FFCoin = game.FFCoin.add(game.multi[0]);
+  game.FFCoin = game.FFCoin.add(game.multi[0].add(1));
   showFFCoin();
 }
+function rabbotPrice() {
+	return rabbotBasePrice.times(EN(10).pow(game.Rabbot));
+}
 function buyRabbot() {
-	let price = EN("1e21")
+	let price = rabbotPrice();
     if (game.FFCoin.gte(price)) {
 		game.Rabbot = game.Rabbot.add(1);
 		game.FFCoin = game.FFCoin.sub(price);
@@ -117,15 +164,12 @@ function buyRabbot() {
     }
 }
 function multiplierPrice(n) {
-	return (game.multi[n - 1].pow(0.5).times(multiplierReq[n - 1])).round();
-}
-function rabmultiplier(n) {
-  
+	return (game.multi[n - 1].add(1).pow(0.5).times(multiplierReq[n - 1])).round();
 }
 function multiplier2(n) {
   let price = multiplierPrice(n);
   if (game.FFCoin.gte(price)) {
-	game.multi[n - 1] = game.multi[n - 1].add(game.multi[n]);
+	game.multi[n - 1] = game.multi[n - 1].add(game.multi[n].add(1).times(EN(1.5).pow(game.Rabbot)));
 	game.FFCoin = game.FFCoin.sub(price);
     showFFCoin();
     showMultipier();
@@ -134,41 +178,65 @@ function multiplier2(n) {
 
 function showMultipier(){
   for (var n = 1; n < 6; n++) {
-    document.getElementById("multi" + n).innerHTML = game.multi[n - 1];
-    document.getElementById("multi" + n + "cost").innerHTML = multiplierPrice(n);
+    document.getElementById("multi" + n).innerHTML = beautifyEN(game.multi[n - 1]);
+    document.getElementById("multi" + n + "cost").innerHTML = beautifyEN(multiplierPrice(n));
   }  
 }
 function showFFCoin() {
-  document.getElementById("FFCoin").innerHTML = game.FFCoin;
+  document.getElementById("FFCoin").innerHTML = beautifyEN(game.FFCoin);
 }
 function showRabbot() {
-  document.getElementById("Rabbot").innerHTML = game.Rabbot;
+  document.getElementById("Rabbot").innerHTML = beautifyEN(game.Rabbot);
+  document.getElementById("rabbotCost").innerHTML = beautifyEN(rabbotPrice());
+  document.getElementById("efficiency").innerHTML = beautifyEN(EN(1.5).pow(game.Rabbot)) + "x";
 }
-function toggleAutoGainCoin() {
-  game.auto = 1 - game.auto;
-  showAutoBuy();
+function functionAutoMulti(n){
+	if(game.autoMultiplier[n-1] == -1) {
+		if (game.FFCoin.gte(autoMultiReq[n-1])) {
+			game.autoMultiplier[n-1] = 0;
+			showAutoBuy();
+		}
+	}else{
+		game.autoMultiplier[n-1] = 1 - game.autoMultiplier[n-1];
+		showAutoBuy();
+	}
 }
-function toggleAutoBuyMulti(n) {
-  game.autoMultiplier[n-1] = 1 - game.autoMultiplier[n-1];
-  showAutoBuy();
+function functionAutoGainCoin(n){
+	if(game.auto == -1) {
+		if (game.FFCoin.gte(autoReq)) {
+			console.log("Test")
+			game.auto = 0;
+			document.getElementById("toggleAutoGainCoinButton").className = ("offButton");
+			showAutoBuy();
+		}
+	}else{
+		game.auto = 1 - game.auto;
+		showAutoBuy();
+	}
 }
 function showAutoBuy() {
-  for (var n = 1; n < 6; n++){
-    if (game.autoMultiplier[n-1] == 1) {
-	  document.getElementById("autoBuyMulti"+n).innerHTML = "ON";
-	  document.getElementById("toggleAutoBuyMultiButton"+n).className = ("onButton");
-    }else{
-	  document.getElementById("autoBuyMulti"+n).innerHTML = "OFF";
-	  document.getElementById("toggleAutoBuyMultiButton"+n).className = ("offButton");
-    }
-  }
-  if (game.auto == 1) {
-	document.getElementById("autoGainText").innerHTML = "ON";
-	  document.getElementById("toggleAutoGainCoinButton").className = ("onButton");
-  }else{
-	document.getElementById("autoGainText").innerHTML = "OFF";
-	  document.getElementById("toggleAutoGainCoinButton").className = ("offButton");
-  }
+	for (var n = 1; n < 6; n++) {
+		if (game.autoMultiplier[n-1] == 1) {
+			document.getElementById("toggleAutoBuyMultiButton"+n).className = ("onButton");
+			document.getElementById("toggleAutoBuyMultiButton"+n).innerHTML = "<div> Auto Employing "+gameStrings["FF"+n]+": </div><text id=\"autoBuyMulti"+n+"\">ON</text>";
+		}else if(game.autoMultiplier[n-1] == 0){
+			document.getElementById("toggleAutoBuyMultiButton"+n).className = ("offButton");
+			document.getElementById("toggleAutoBuyMultiButton"+n).innerHTML = "<div> Auto Employing "+gameStrings["FF"+n]+": </div><text id=\"autoBuyMulti"+n+"\">OFF</text>";
+		}else if(game.autoMultiplier[n-1] == -1){
+			document.getElementById("toggleAutoBuyMultiButton"+n).className = ("lockedButton");
+			document.getElementById("toggleAutoBuyMultiButton"+n).innerHTML = "<div>Unlock Auto Employing <text id=\"autoFF"+n+"\">" + gameStrings["FF"+n] + "</text></div><div>Cost: <data id=\"auto"+n+"cost\">" + beautifyEN(autoMultiReq[n-1]) + "</data> FFC</div>";
+		}
+	}
+	if (game.auto == 1) {
+		document.getElementById("toggleAutoGainCoinButton").className = ("onButton");
+		document.getElementById("toggleAutoGainCoinButton").innerHTML = "<div> Auto Gain "+gameStrings["FFC"]+": </div> <text id=\"autoGainText\">ON</text>";
+	}else if (game.auto == 0) {
+		document.getElementById("toggleAutoGainCoinButton").className = ("offButton");
+		document.getElementById("toggleAutoGainCoinButton").innerHTML = "<div> Auto Gain "+gameStrings["FFC"]+": </div> <text id=\"autoGainText\">OFF</text>";
+	}else if (game.auto == -1) {
+		document.getElementById("toggleAutoGainCoinButton").className = ("lockedButton");
+		document.getElementById("toggleAutoGainCoinButton").innerHTML = "<div>Unlock Auto Gaining <text id=\"autoFFC\">"+gameStrings["FFC"]+"</text></div><div>Cost: <data id=\"autoFFCcost\">"+beautifyEN(autoReq)+"</data> FFC</div>";
+	}
 }
 function toggleBulkBuying() {
   game.bulk = (game.bulk + 1) % bulkBuying.length;
@@ -190,14 +258,6 @@ function toggleBulkBuying() {
   }
   showMultipier();
 }
-window.setInterval(function() {
-  if (game.auto == 1) gainFFCoin();
-  if (game.autoMultiplier[0] == 1) multiplier2(1);
-  if (game.autoMultiplier[1] == 1) multiplier2(2);
-  if (game.autoMultiplier[2] == 1) multiplier2(3);
-  if (game.autoMultiplier[3] == 1) multiplier2(4);
-  if (game.autoMultiplier[4] == 1) multiplier2(5);
-}, 50);
 
 function copyStringToClipboard(str) {
   var el = document.createElement("textarea");
@@ -234,3 +294,13 @@ function copyToClipboard(el) {
     }
     document.execCommand("copy");
 }
+//Run
+reset();
+window.setInterval(function() {
+  if (game.auto == 1) gainFFCoin();
+  if (game.autoMultiplier[0] == 1) multiplier2(1);
+  if (game.autoMultiplier[1] == 1) multiplier2(2);
+  if (game.autoMultiplier[2] == 1) multiplier2(3);
+  if (game.autoMultiplier[3] == 1) multiplier2(4);
+  if (game.autoMultiplier[4] == 1) multiplier2(5);
+}, 10);

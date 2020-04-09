@@ -43,49 +43,53 @@
         <div class="lTableCell">Rabbot: </div>
 		<div class="rTableCell"><data id="Rabbot">0</data></div>
 	  </div>
+	  <div class="rTableRow">
+        <div class="lTableCell">Efficiency: </div>
+		<div class="rTableCell"><data id="efficiency">1x</data></div>
+	  </div>
 	</div>
 	<div class="grid-multiplier">
-		<button class="defaultButton" onclick="gainFFCoin()">
+		<button id="GainCoinButton" class="defaultButton" onclick="gainFFCoin()">
 			Gain Fat Fat Coin!
 		</button>
-		<button id="toggleAutoGainCoinButton" class="offButton" onclick="toggleAutoGainCoin()">
-			<div> Auto Gain Coin: </div>
-			<text id="autoGainText">OFF</data>
+		<button id="toggleAutoGainCoinButton" class="lockedButton" onclick="functionAutoGainCoin()">
+			<div>Unlock Auto Gaining <text id="autoFFC"></text></div>
+			<div>Cost: <data id="autoFFCcost"></data> FFC</div>
 		</button>
-		<button class="defaultButton" onclick="multiplier2(1)">
+		<button id="Multiplier1Button" class="defaultButton" onclick="multiplier2(1)">
 			Employ 1 Fat Fat Worker <br />Cost: <data id="multi1cost"></data> FFC
 		</button>
-		<button id="toggleAutoBuyMultiButton1" class="offButton" onclick="toggleAutoBuyMulti(1)">
-			<div> Auto Employing Fat Fat Worker: </div>
-			<text id="autoBuyMulti1">OFF</text>
+		<button id="toggleAutoBuyMultiButton1" class="lockedButton" onclick="functionAutoMulti(1)">
+			<div>Unlock Auto Employing <text id="autoFF1"></text></div>
+			<div>Cost: <data id="auto1cost"></data> FFC</div>
 		</button>
-		<button class="defaultButton" onclick="multiplier2(2)">
+		<button id="Multiplier2Button" class="defaultButton" onclick="multiplier2(2)">
 			Employ 1 Fat Fat Supervisor <br />Cost: <data id="multi2cost"></data> FFC
 		</button>
-		<button id="toggleAutoBuyMultiButton2" class="offButton" onclick="toggleAutoBuyMulti(2)">
-			<div> Auto Employing Fat Fat Supervisor: </div>
-			<text id="autoBuyMulti2">OFF</text>
+		<button id="toggleAutoBuyMultiButton2" class="lockedButton" onclick="functionAutoMulti(2)">
+			<div>Unlock Auto Employing <text id="autoFF2"></text></div>
+			<div>Cost: <data id="auto2cost"></data> FFC</div>
 		</button>
-		<button class="defaultButton" onclick="multiplier2(3)">
+		<button id="Multiplier3Button" class="defaultButton" onclick="multiplier2(3)">
 			Employ 1 Fat Fat Manager <br />Cost: <data id="multi3cost"></data> FFC
 		</button>
-		<button id="toggleAutoBuyMultiButton3" class="offButton" onclick="toggleAutoBuyMulti(3)">
-			<div> Auto Employing Fat Fat Manager: </div>
-			<text id="autoBuyMulti3">OFF</text>
+		<button id="toggleAutoBuyMultiButton3" class="lockedButton" onclick="functionAutoMulti(3)">
+			<div>Unlock Auto Employing <text id="autoFF3"></text></div>
+			<div>Cost: <data id="auto3cost"></data> FFC</div>
 		</button>
-		<button class="defaultButton" onclick="multiplier2(4)">
+		<button id="Multiplier4Button" class="defaultButton" onclick="multiplier2(4)">
 			Employ 1 Fat Fat Director <br />Cost: <data id="multi4cost"></data> FFC
 		</button>
-		<button id="toggleAutoBuyMultiButton4" class="offButton" onclick="toggleAutoBuyMulti(4)">
-			<div> Auto Employing Fat Fat Director:</div>
-			<text id="autoBuyMulti4">OFF</text>
+		<button id="toggleAutoBuyMultiButton4" class="lockedButton" onclick="functionAutoMulti(4)">
+			<div>Unlock Auto Employing <text id="autoFF4"></text></div>
+			<div>Cost: <data id="auto4cost"></data> FFC</div>
 		</button>
-		<button class="defaultButton" onclick="multiplier2(5)">
+		<button id="Multiplier5Button" class="defaultButton" onclick="multiplier2(5)">
 			Employ 1 Fat Fat Overseer <br />Cost: <data id="multi5cost"></data> FFC
 		</button>
-		<button id="toggleAutoBuyMultiButton5" class="offButton" onclick="toggleAutoBuyMulti(5)">
-			<div> Auto Employing Fat Fat Overseer: </div>
-			<text id="autoBuyMulti5">OFF</text>
+		<button id="toggleAutoBuyMultiButton5" class="lockedButton" onclick="functionAutoMulti(5)">
+			<div>Unlock Auto Employing <text id="autoFF5"></text></div>
+			<div>Cost: <data id="auto5cost"></data> FFC</div>
 		</button>
     </div>
     <div style="width: 100%; background-color: white;">
@@ -110,7 +114,7 @@
       </button>
 	  -->
     </div>
-    <div style="width: 100%; background-color: white;">
+    <div style="width: 100%; background-color: white; display:flex;;">
       <button class="defaultButton" onclick="saveGame()">
         Save
       </button>
