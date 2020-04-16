@@ -48,6 +48,12 @@
 		<div class="rTableCell"><data id="efficiency">1x</data></div>
 	  </div>
 	</div>
+	<div id="divtab" class="tab">
+		<button class="tablinks active" onclick="openTab(event, 'tabFatFat')">Fat Fat</button>
+		<button class="tablinks" onclick="openTab(event, 'tabRabbot')">Rabbot</button>
+		<button class="tablinks" onclick="openTab(event, 'tabOptions')">Options</button>
+	</div>
+	<div id="tabFatFat" class="tabcontent" style="display: block;">
 	<div class="grid-multiplier">
 		<button id="GainCoinButton" class="defaultButton" onclick="gainFFCoin()">
 			Gain Fat Fat Coin!
@@ -57,80 +63,71 @@
 			<div>Cost: <data id="autoFFCcost"></data> FFC</div>
 		</button>
 		<button id="Multiplier1Button" class="defaultButton" onclick="multiplier2(1)">
-			Employ 1 Fat Fat Worker <br />Cost: <data id="multi1cost"></data> FFC
+			Employ Fat Fat Worker <br />Cost: <data id="multi1cost"></data> FFC
 		</button>
 		<button id="toggleAutoBuyMultiButton1" class="lockedButton" onclick="functionAutoMulti(1)">
 			<div>Unlock Auto Employing <text id="autoFF1"></text></div>
 			<div>Cost: <data id="auto1cost"></data> FFC</div>
 		</button>
 		<button id="Multiplier2Button" class="defaultButton" onclick="multiplier2(2)">
-			Employ 1 Fat Fat Supervisor <br />Cost: <data id="multi2cost"></data> FFC
+			Employ Fat Fat Supervisor <br />Cost: <data id="multi2cost"></data> FFC
 		</button>
 		<button id="toggleAutoBuyMultiButton2" class="lockedButton" onclick="functionAutoMulti(2)">
 			<div>Unlock Auto Employing <text id="autoFF2"></text></div>
 			<div>Cost: <data id="auto2cost"></data> FFC</div>
 		</button>
 		<button id="Multiplier3Button" class="defaultButton" onclick="multiplier2(3)">
-			Employ 1 Fat Fat Manager <br />Cost: <data id="multi3cost"></data> FFC
+			Employ Fat Fat Manager <br />Cost: <data id="multi3cost"></data> FFC
 		</button>
 		<button id="toggleAutoBuyMultiButton3" class="lockedButton" onclick="functionAutoMulti(3)">
 			<div>Unlock Auto Employing <text id="autoFF3"></text></div>
 			<div>Cost: <data id="auto3cost"></data> FFC</div>
 		</button>
 		<button id="Multiplier4Button" class="defaultButton" onclick="multiplier2(4)">
-			Employ 1 Fat Fat Director <br />Cost: <data id="multi4cost"></data> FFC
+			Employ Fat Fat Director <br />Cost: <data id="multi4cost"></data> FFC
 		</button>
 		<button id="toggleAutoBuyMultiButton4" class="lockedButton" onclick="functionAutoMulti(4)">
 			<div>Unlock Auto Employing <text id="autoFF4"></text></div>
 			<div>Cost: <data id="auto4cost"></data> FFC</div>
 		</button>
 		<button id="Multiplier5Button" class="defaultButton" onclick="multiplier2(5)">
-			Employ 1 Fat Fat Overseer <br />Cost: <data id="multi5cost"></data> FFC
+			Employ Fat Fat Overseer <br />Cost: <data id="multi5cost"></data> FFC
 		</button>
 		<button id="toggleAutoBuyMultiButton5" class="lockedButton" onclick="functionAutoMulti(5)">
 			<div>Unlock Auto Employing <text id="autoFF5"></text></div>
 			<div>Cost: <data id="auto5cost"></data> FFC</div>
 		</button>
     </div>
+	</div>
+	<div id="tabRabbot" class="tabcontent">
     <div style="width: 100%; background-color: white;">
 	  <button class="defaultButton" onclick="buyRabbot()">
 	    Buy Rabbot! <br />Cost: <data id="rabbotCost">1e21</data> FFC
       </button>
-	  <!--
-      <button class="defaultButton" onclick="rabmultiplier(1)">
-        Buy 1st Rabbot Multiplier <br />Cost: <data id="rabmulti1cost"></data>
-      </button>
-      <button class="defaultButton" onclick="rabmultiplier(2)">
-        Buy 2nd Rabbot Multiplier <br />Cost: <data id="rabmulti2cost"></data>
-      </button>
-      <button class="defaultButton" onclick="rabmultiplier(3)">
-        Buy 3rd Rabbot Multiplier <br />Cost: <data id="rabmulti3cost"></data>
-      </button>
-      <button class="defaultButton" onclick="rabmultiplier(4)">
-        Buy 4th Rabbot Multiplier <br />Cost: <data id="rabmulti4cost"></data>
-      </button>
-      <button class="defaultButton" onclick="rabmultiplier(5)">
-        Buy 5th Rabbot Multiplier <br />Cost: <data id="rabmulti5cost"></data>
-      </button>
-	  -->
     </div>
-    <div style="width: 100%; background-color: white; display:flex;;">
-      <button class="defaultButton" onclick="saveGame()">
-        Save
-      </button>
-      <button class="defaultButton" onclick="loadGame()">
-        Load
-      </button>
-      <button class="defaultButton" onclick="exportGame()">
-        Export Save
-      </button>
-      <button class="defaultButton" onclick="importGame()">
-        Import Save
-      </button>
-      <button class="defaultButton" onclick="reset()">
-        Reset
+    <div style="width: 100%; background-color: white;">
+	  <button class="defaultButton" onclick="useRabbot()">
+	    Use 1 Rabbot to increase efficiency base by 0.1 <br />Cost: <data id="efficiencyUpgradeCost">1</data> Rabbot
       </button>
     </div>
+	</div>	
+	<div id="tabOptions" class="tabcontent">
+		<button class="defaultButton" onclick="saveGame()">
+			Save
+		</button>
+		<button class="defaultButton" onclick="loadGame()">
+			Load
+		</button>
+		<button class="defaultButton" onclick="exportGame()">
+			Export Save
+		</button>
+		<button class="defaultButton" onclick="importGame()">
+			Import Save
+		</button>
+		<button class="defaultButton" onclick="reset()">
+			Reset
+		</button>
+	</div>
     <p id="newline"></p>
   </body>
 </html>

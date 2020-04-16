@@ -89,6 +89,20 @@ function ENify(x) {
 }
 
 //Game Functions
+function openTab(evt, tabName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
 function reset() {
   game = {
     FFCoin: EN(0),
@@ -103,16 +117,20 @@ function reset() {
     ],
 	auto: -1,
 	autoMultiplier: [-1, -1, -1, -1, -1],
-	efficiency: 0
+	efficiency: 0,
+	efficiencyBase: EN(1.5),
+	rabbotPriceMulti: EN(10),
+	rabbotNow: EN(0)
   };
   
   showAll();
 }
 function showAll() {
-  showFFCoin();
-  showMultipier();
-  showAutoBuy();
-  showRabbot();
+	showFFCoin();
+	showMultipier();
+	showAutoBuy();
+	showRabbot();
+	showEfficiency();
 }
 function saveGame() {
   localStorage.setItem(savePath, JSON.stringify(game));
@@ -124,17 +142,20 @@ function importGame() {
   let loadgameTemp=""
   loadgameTemp = JSON.parse(atob(prompt("Paste in your save WARNING: WILL OVERWRITE YOUR CURRENT SAVE")))
   if (loadgameTemp!="") {
-    loadingGame(loadgameTemp)
+    loadingGame(loadgameTemp);
   }
   showAll();
 }
 function loadingGame(loadgameTemp) {
-  game["FFCoin"] = ENify(loadgameTemp["FFCoin"]);
-  game["Rabbot"] = ENify(loadgameTemp["Rabbot"]);
-  game["multi"] = (loadgameTemp["multi"]).map(ENify);
-  game["auto"] = Number(loadgameTemp["auto"]);
-  game["autoMultiplier"] = (loadgameTemp["autoMultiplier"]).map(Number);;
-  game["efficiency"] = Number(loadgameTemp["efficiency"]);
+	game["FFCoin"] = ENify(loadgameTemp["FFCoin"]);
+	game["Rabbot"] = ENify(loadgameTemp["Rabbot"]);
+	game["multi"] = (loadgameTemp["multi"]).map(ENify);
+	game["auto"] = Number(loadgameTemp["auto"]);
+	game["autoMultiplier"] = (loadgameTemp["autoMultiplier"]).map(Number);;
+	game["efficiency"] = Number(loadgameTemp["efficiency"]);
+	game["efficiencyBase"] = ENify(loadgameTemp["efficiencyBase"]);
+	game["rabbotPriceMulti"] = ENify(loadgameTemp["rabbotPriceMulti"]);
+	game["rabbotNow"] = ENify(loadgameTemp["rabbotNow"]);
 }
 function loadGame() {
   var loadgameTemp = JSON.parse(localStorage.getItem(savePath));
@@ -152,16 +173,26 @@ function gainFFCoin() {
   showFFCoin();
 }
 function rabbotPrice() {
-	return rabbotBasePrice.times(EN(10).pow(game.Rabbot));
+	return rabbotBasePrice.times(game.rabbotPriceMulti.pow(game.Rabbot));
 }
 function buyRabbot() {
 	let price = rabbotPrice();
     if (game.FFCoin.gte(price)) {
 		game.Rabbot = game.Rabbot.add(1);
-		game.FFCoin = game.FFCoin.sub(price);
+		game.rabbotNow = game.rabbotNow.add(1);
+		game.FFCoin = game.FFCoin.sub(price);		
 		showFFCoin();
 		showRabbot();
+		showEfficiency();
     }
+}
+function useRabbot() {
+	if (game.rabbotNow.gte(1)) {
+		game.rabbotNow = game.rabbotNow.sub(1);
+		game.efficiencyBase = game.efficiencyBase.add(0.1);
+		showRabbot();
+		showEfficiency();
+	}
 }
 function multiplierPrice(n) {
 	return (game.multi[n - 1].add(1).pow(0.5).times(multiplierReq[n - 1])).round();
@@ -169,7 +200,7 @@ function multiplierPrice(n) {
 function multiplier2(n) {
   let price = multiplierPrice(n);
   if (game.FFCoin.gte(price)) {
-	game.multi[n - 1] = game.multi[n - 1].add(game.multi[n].add(1).times(EN(1.5).pow(game.Rabbot)));
+	game.multi[n - 1] = game.multi[n - 1].add(game.multi[n].add(1).times(game.efficiency));
 	game.FFCoin = game.FFCoin.sub(price);
     showFFCoin();
     showMultipier();
@@ -177,18 +208,21 @@ function multiplier2(n) {
 }
 
 function showMultipier(){
-  for (var n = 1; n < 6; n++) {
-    document.getElementById("multi" + n).innerHTML = beautifyEN(game.multi[n - 1]);
-    document.getElementById("multi" + n + "cost").innerHTML = beautifyEN(multiplierPrice(n));
-  }  
+	for (var n = 1; n < 6; n++) {
+		document.getElementById("multi" + n).innerHTML = beautifyEN(game.multi[n - 1]);
+		document.getElementById("multi" + n + "cost").innerHTML = beautifyEN(multiplierPrice(n));
+	}  
 }
 function showFFCoin() {
-  document.getElementById("FFCoin").innerHTML = beautifyEN(game.FFCoin);
+	document.getElementById("FFCoin").innerHTML = beautifyEN(game.FFCoin);
 }
 function showRabbot() {
-  document.getElementById("Rabbot").innerHTML = beautifyEN(game.Rabbot);
-  document.getElementById("rabbotCost").innerHTML = beautifyEN(rabbotPrice());
-  document.getElementById("efficiency").innerHTML = beautifyEN(EN(1.5).pow(game.Rabbot)) + "x";
+	document.getElementById("Rabbot").innerHTML = beautifyEN(game.rabbotNow) + "(" + beautifyEN(game.Rabbot) + ")";
+	document.getElementById("rabbotCost").innerHTML = beautifyEN(rabbotPrice());
+}
+function showEfficiency() {
+	game.efficiency = game.efficiencyBase.pow(game.rabbotNow);
+	document.getElementById("efficiency").innerHTML = beautifyEN(game.efficiency) + "x";
 }
 function functionAutoMulti(n){
 	if(game.autoMultiplier[n-1] == -1) {
@@ -218,10 +252,10 @@ function showAutoBuy() {
 	for (var n = 1; n < 6; n++) {
 		if (game.autoMultiplier[n-1] == 1) {
 			document.getElementById("toggleAutoBuyMultiButton"+n).className = ("onButton");
-			document.getElementById("toggleAutoBuyMultiButton"+n).innerHTML = "<div> Auto Employing "+gameStrings["FF"+n]+": </div><text id=\"autoBuyMulti"+n+"\">ON</text>";
+			document.getElementById("toggleAutoBuyMultiButton"+n).innerHTML = "<div> Auto Employing "+gameStrings["FF"+n]+": </div><span style=\"vertical-align: middle; display: inline-block; line-height: normal;\" id=\"autoBuyMulti"+n+"\">ON</span>";
 		}else if(game.autoMultiplier[n-1] == 0){
 			document.getElementById("toggleAutoBuyMultiButton"+n).className = ("offButton");
-			document.getElementById("toggleAutoBuyMultiButton"+n).innerHTML = "<div> Auto Employing "+gameStrings["FF"+n]+": </div><text id=\"autoBuyMulti"+n+"\">OFF</text>";
+			document.getElementById("toggleAutoBuyMultiButton"+n).innerHTML = "<div> Auto Employing "+gameStrings["FF"+n]+": </div><span style=\"vertical-align: middle; display: inline-block; line-height: normal;\" id=\"autoBuyMulti"+n+"\">OFF</span>";
 		}else if(game.autoMultiplier[n-1] == -1){
 			document.getElementById("toggleAutoBuyMultiButton"+n).className = ("lockedButton");
 			document.getElementById("toggleAutoBuyMultiButton"+n).innerHTML = "<div>Unlock Auto Employing <text id=\"autoFF"+n+"\">" + gameStrings["FF"+n] + "</text></div><div>Cost: <data id=\"auto"+n+"cost\">" + beautifyEN(autoMultiReq[n-1]) + "</data> FFC</div>";
